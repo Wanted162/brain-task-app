@@ -3,23 +3,22 @@ pipeline {
 
     environment {
         AWS_DEFAULT_REGION = "ap-south-1"
-        AWS_ACCOUNT_ID = "907969929387"
-        IMAGE_REPO_NAME = "brain-tasks-app"
+        ECR_REGISTRY = "907969929387.dkr.ecr.ap-south-1.amazonaws.com"
+        ECR_REPOSITORY = "brain-tasks-app"
         IMAGE_TAG = "latest"
-        ECR_REGISTRY = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-        ECR_IMAGE = "${ECR_REGISTRY}/${IMAGE_REPO_NAME}:${IMAGE_TAG}"
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/Wanted162/brain-task-app.git'
+                git branch: 'main',
+                    url: 'https://github.com/Wanted162/brain-task-app.git'
             }
         }
 
         stage('Docker Build') {
             steps {
-                sh 'docker build -t $ECR_IMAGE .'
+                sh 'docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .'
             }
         }
 
@@ -31,14 +30,15 @@ pipeline {
 
         stage('Docker Push') {
             steps {
-                sh 'docker push $ECR_IMAGE'
+                sh 'docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG'
             }
         }
 
         stage('Deploy to EKS') {
             steps {
-                sh 'kubectl set image deployment/brain-tasks-deployment brain-tasks=$ECR_IMAGE -n default'
-                sh 'kubectl rollout status deployment/brain-tasks-deployment -n default'
+                sh 'aws eks update-kubeconfig --region $AWS_DEFAULT_REGION --name brain-tasks-cluster'
+                sh 'kubectl apply -f k8s/deployment.yaml'
+                sh 'kubectl apply -f k8s/service.yaml'
             }
         }
     }
