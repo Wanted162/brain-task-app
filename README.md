@@ -5,7 +5,7 @@ This repository contains the deployment of the **Brain Tasks React application**
 ---
 
 ## 🔹 Access the Application
-The application is deployed on AWS EKS and exposed via an AWS Elastic Load Balancer (ELB).  
+The application was deployed on AWS EKS and exposed via an AWS Elastic Load Balancer (ELB).  
 - a495cbc6fa5da4838b0165958ba9bf6d-1165788814.ap-south-1.elb.amazonaws.com
 
 ---
