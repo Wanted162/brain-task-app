@@ -42,13 +42,23 @@ The application is deployed on AWS EKS and exposed via an AWS Elastic Load Balan
 
 ## 🔹 Repository Structure
 ├── Dockerfile
+
 ├── buildspec.yml
+
 ├── appspec.yml
+
 ├── scripts/
+
 │ └── deploy.sh
+
 ├── k8s/
+
 │ ├── deployment.yaml
+
 │ ├── service.yaml
+
 │ ├── hpa.yaml
+
 │ └── metrics-server-*.yaml
+
 └── README.md
