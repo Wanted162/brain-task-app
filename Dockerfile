@@ -1,18 +1,14 @@
-# Step 1: Use node image
-FROM node:18-alpine
+# Use Nginx image to serve static files
+FROM nginx:alpine
 
-# Step 2: Set working directory
-WORKDIR /app
+# Remove default nginx static files
+RUN rm -rf /usr/share/nginx/html/*
 
-# Step 3: Copy package.json (if exists) and install serve globally
-COPY package*.json ./
-RUN npm install -g serve
+# Copy built dist files to nginx html directory
+COPY dist/ /usr/share/nginx/html/
 
-# Step 4: Copy app files
-COPY . .
+# Expose port 80
+EXPOSE 80
 
-# Step 5: Expose port 3000
-EXPOSE 3000
-
-# Step 6: Run serve to serve dist folder
-CMD ["serve", "-s", "dist", "-l", "3000"]
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]
