@@ -1,0 +1,12 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: brain-tasks-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: brain-tasks-deployment
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 30
