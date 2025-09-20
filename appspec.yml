@@ -1,0 +1,11 @@
+version: 0.0
+resources:
+  - type: AWS::EKS::Application
+    properties:
+      name: brain-tasks-app
+      clusterName: brain-tasks-cluster
+      namespace: default
+      taskDefinition:
+        files:
+          - source: k8s/deployment.yaml
+          - source: k8s/service.yaml
